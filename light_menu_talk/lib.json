@@ -1,0 +1,11 @@
+{
+    "id": "light_menu_talk",
+    "authors": [
+        "NelleMonelle" //coding
+    ],
+    "version": "v1.0.0",
+    "engineVer": "v0.9.0-dev",
+    "config": {
+        "have_talk_when_alone": false
+    }
+}
