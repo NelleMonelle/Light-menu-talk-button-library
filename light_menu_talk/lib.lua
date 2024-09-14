@@ -56,7 +56,7 @@ function lib:init()
             Game.world:closeMenu()
             return
         end
-    
+
         if self.state == "MAIN" then
             local old_selected = self.current_selecting
             if Input.is("up", key)    then self.current_selecting = self.current_selecting - 1 end
@@ -87,7 +87,7 @@ function lib:init()
                 self.box = LightItemMenu()
                 self.box.layer = 1
                 self:addChild(self.box)
-    
+
                 self.ui_select:stop()
                 self.ui_select:play()
             end
@@ -97,7 +97,7 @@ function lib:init()
             self.box = LightStatMenu()
             self.box.layer = 1
             self:addChild(self.box)
-    
+
             self.ui_select:stop()
             self.ui_select:play()
         elseif button == 3 then
@@ -108,7 +108,7 @@ function lib:init()
                     self.box = LightCellMenu()
                     self.box.layer = 1
                     self:addChild(self.box)
-    
+
                     self.ui_select:stop()
                     self.ui_select:play()
                 end
@@ -126,7 +126,7 @@ function lib:init()
         elseif button == 4 then
             Input.clear("confirm")
             Game.world:closeMenu()
-    
+
             self.ui_select:stop()
             self.ui_select:play()
 
@@ -139,7 +139,7 @@ function lib:init()
     Utils.hook(LightMenu, "realign", function(orig, self)
         local _, player_y = Game.world.player:localToScreenPos()
         self.top = false --player_y > 260  disabled for now
-    
+
         local offset = 0
         if self.top then
             offset = 270
@@ -147,56 +147,58 @@ function lib:init()
         self.info_box.y = 76 + offset
     end)
 
-    Utils.hook(LightMenu, "draw", function(orig, self)
-        Object.draw(self)
+    if not Mod.libs["magical-glass"] then
+        Utils.hook(LightMenu, "draw", function(orig, self)
+            Object.draw(self)
 
-        local offset = 0
-        if self.top then
-            offset = 270
-        end
+            local offset = 0
+            if self.top then
+                offset = 270
+            end
 
-        local chara = Game.party[1]
+            local chara = Game.party[1]
 
-        love.graphics.setFont(self.font)
-        Draw.setColor(PALETTE["world_text"])
-        love.graphics.print(chara:getName(), 46, 60 + offset)
-
-        love.graphics.setFont(self.font_small)
-        love.graphics.print("LV  "..chara:getLightLV(), 46, 100 + offset)
-        love.graphics.print("HP  "..chara:getHealth().."/"..chara:getStat("health"), 46, 118 + offset)
-        love.graphics.print(Utils.padString(Game:getConfig("lightCurrencyShort"), 4)..Game.lw_money, 46, 136 + offset)
-
-        love.graphics.setFont(self.font)
-        if Game.inventory:getItemCount(self.storage, false) <= 0 then
-            Draw.setColor(PALETTE["world_gray"])
-        else
+            love.graphics.setFont(self.font)
             Draw.setColor(PALETTE["world_text"])
-        end
-        love.graphics.print("ITEM", 84, 188 + (36 * 0))
-        Draw.setColor(PALETTE["world_text"])
-        love.graphics.print("STAT", 84, 188 + (36 * 1))
-        if Game:getFlag("has_cell_phone") then
-            if #Game.world.calls > 0 then
-                Draw.setColor(PALETTE["world_text"])
-            else
+            love.graphics.print(chara:getName(), 46, 60 + offset)
+
+            love.graphics.setFont(self.font_small)
+            love.graphics.print("LV  "..chara:getLightLV(), 46, 100 + offset)
+            love.graphics.print("HP  "..chara:getHealth().."/"..chara:getStat("health"), 46, 118 + offset)
+            love.graphics.print(Utils.padString(Game:getConfig("lightCurrencyShort"), 4)..Game.lw_money, 46, 136 + offset)
+
+            love.graphics.setFont(self.font)
+            if Game.inventory:getItemCount(self.storage, false) <= 0 then
                 Draw.setColor(PALETTE["world_gray"])
-            end
-            love.graphics.print("CELL", 84, 188 + (36 * 2))
-            if Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") or not Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") and #Game.party > 1 then
+            else
                 Draw.setColor(PALETTE["world_text"])
-                love.graphics.print("TALK", 84, 188 + (36 * 3))
             end
-        else
+            love.graphics.print("ITEM", 84, 188 + (36 * 0))
             Draw.setColor(PALETTE["world_text"])
-            love.graphics.print("TALK", 84, 188 + (36 * 2))
-        end
+            love.graphics.print("STAT", 84, 188 + (36 * 1))
+            if Game:getFlag("has_cell_phone") then
+                if #Game.world.calls > 0 then
+                    Draw.setColor(PALETTE["world_text"])
+                else
+                    Draw.setColor(PALETTE["world_gray"])
+                end
+                love.graphics.print("CELL", 84, 188 + (36 * 2))
+                if Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") or not Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") and #Game.party > 1 then
+                    Draw.setColor(PALETTE["world_text"])
+                    love.graphics.print("TALK", 84, 188 + (36 * 3))
+                end
+            else
+                Draw.setColor(PALETTE["world_text"])
+                love.graphics.print("TALK", 84, 188 + (36 * 2))
+            end
 
-        if self.state == "MAIN" then
-            Draw.setColor(Game:getSoulColor())
-            Draw.draw(self.heart_sprite, 56, 160 + (36 * self.current_selecting), 0, 2, 2)
-        end
-    end)
-    
+            if self.state == "MAIN" then
+                Draw.setColor(Game:getSoulColor())
+                Draw.draw(self.heart_sprite, 56, 160 + (36 * self.current_selecting), 0, 2, 2)
+            end
+        end)
+    end
+
 end
 
 return lib
