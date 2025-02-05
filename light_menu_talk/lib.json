@@ -1,9 +1,10 @@
 {
     "id": "light_menu_talk",
     "authors": [
-        "NelleMonelle" //coding
+        "NelleMonelle", //main coding
+        "FireRainV" //help with fixing stuff
     ],
-    "version": "v1.1.0",
+    "version": "v1.1.1",
     "engineVer": "v0.10.0-dev",
     "config": {
         "have_talk_when_alone": false
