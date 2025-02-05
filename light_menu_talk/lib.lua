@@ -41,7 +41,7 @@ function lib:init()
         self:addChild(self.info_box)
         self:realign()
 
-        if Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") or not Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") and #Game.party > 1 then
+        if Game:getFlag("has_cell_phone", false) and (Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") or #Game.party > 1) then
             self.choice_box = UIBox(56, 192, 94, 126)
         else
             self.choice_box = UIBox(56, 192, 94, 100)
@@ -183,13 +183,15 @@ function lib:init()
                     Draw.setColor(PALETTE["world_gray"])
                 end
                 love.graphics.print("CELL", 84, 188 + (36 * 2))
-                if Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") or not Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") and #Game.party > 1 then
+                if Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") or #Game.party > 1 then
                     Draw.setColor(PALETTE["world_text"])
                     love.graphics.print("TALK", 84, 188 + (36 * 3))
                 end
             else
-                Draw.setColor(PALETTE["world_text"])
-                love.graphics.print("TALK", 84, 188 + (36 * 2))
+                if Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") or #Game.party > 1 then
+                    Draw.setColor(PALETTE["world_text"])
+                    love.graphics.print("TALK", 84, 188 + (36 * 2))
+                end
             end
 
             if self.state == "MAIN" then
