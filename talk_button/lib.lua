@@ -41,8 +41,8 @@ function lib:init()
         self:addChild(self.info_box)
         self:realign()
 
-        if Game:getFlag("has_cell_phone", false) and (Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") or #Game.party > 1) then
-            self.choice_box = UIBox(56, 192, 94, 126)
+        if Game:getFlag("has_cell_phone", false) and (Kristal.getLibConfig("talk_button", "have_talk_when_alone") or #Game.world.followers > 0) then
+            self.choice_box = UIBox(56, 192, 94, 134)
         else
             self.choice_box = UIBox(56, 192, 94, 100)
         end
@@ -65,7 +65,7 @@ function lib:init()
             if Game:getFlag("has_cell_phone") then
                 max_selecting = max_selecting + 1
             end
-            if Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") or not Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") and #Game.party > 1 then
+            if Kristal.getLibConfig("talk_button", "have_talk_when_alone") or not Kristal.getLibConfig("talk_button", "have_talk_when_alone") and #Game.world.followers > 0 then
                 max_selecting = max_selecting + 1
             end
             self.current_selecting = Utils.clamp(self.current_selecting, 1, max_selecting)
@@ -138,11 +138,15 @@ function lib:init()
 
     Utils.hook(LightMenu, "realign", function(orig, self)
         local _, player_y = Game.world.player:localToScreenPos()
-        self.top = false --player_y > 260  disabled for now
+        self.top = player_y > 260
 
         local offset = 0
         if self.top then
-            offset = 270
+            if Game:getFlag("has_cell_phone", false) and (Kristal.getLibConfig("talk_button", "have_talk_when_alone") or #Game.world.followers > 0) then
+                offset = 304
+            else
+                offset = 270
+            end
         end
         self.info_box.y = 76 + offset
     end)
@@ -153,7 +157,11 @@ function lib:init()
 
             local offset = 0
             if self.top then
-                offset = 270
+                if Game:getFlag("has_cell_phone", false) and (Kristal.getLibConfig("talk_button", "have_talk_when_alone") or #Game.world.followers > 0) then
+                    offset = 304
+                else
+                    offset = 270
+                end
             end
 
             local chara = Game.party[1]
@@ -183,12 +191,12 @@ function lib:init()
                     Draw.setColor(PALETTE["world_gray"])
                 end
                 love.graphics.print("CELL", 84, 188 + (36 * 2))
-                if Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") or #Game.party > 1 then
+                if Kristal.getLibConfig("talk_button", "have_talk_when_alone") or #Game.world.followers > 0 then
                     Draw.setColor(PALETTE["world_text"])
                     love.graphics.print("TALK", 84, 188 + (36 * 3))
                 end
             else
-                if Kristal.getLibConfig("light_menu_talk", "have_talk_when_alone") or #Game.party > 1 then
+                if Kristal.getLibConfig("talk_button", "have_talk_when_alone") or #Game.world.followers > 0 then
                     Draw.setColor(PALETTE["world_text"])
                     love.graphics.print("TALK", 84, 188 + (36 * 2))
                 end
