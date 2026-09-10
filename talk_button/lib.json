@@ -5,9 +5,10 @@
         "FireRainV", //contributor, help with fixing stuff
         "Charlie Emily" //contributor, dark menu talk button
     ],
-    "version": "v1.2.0",
-    "engineVer": "v0.10.0-dev",
+    "version": "v1.3.0",
+    "engineVer": "v0.11.0-dev",
     "config": {
-        "have_talk_when_alone": false
+        "have_talk_when_alone": false,
+        "talk_button_position": 4
     }
 }
