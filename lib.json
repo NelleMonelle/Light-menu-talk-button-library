@@ -6,7 +6,7 @@
         "Charlie Emily", //contributor, DarkMenu hook
         "AcousticJamm" //contributor, help with fixing the DarkMenu compatibility
     ],
-    "version": "v1.3.1",
+    "version": "v1.3.2",
     "engineVer": "v0.11.0-dev",
     "config": {
         "have_talk_when_alone": false,
